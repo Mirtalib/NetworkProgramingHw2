@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using System.Net.Sockets;
+using System.Text.Json;
 
 var client = new TcpClient("127.0.0.1", 1234);
 
@@ -29,5 +30,55 @@ while (true)
         Text = CommandText,
         Param = CommandParam
     };
+
+    switch (command.Text.ToLower())
+    {
+        case Command.HELP:
+            {
+                var jsonStr = JsonSerializer.Serialize(command);
+                bw.Write(jsonStr);
+                await Task.Delay(50);
+                var response = br.ReadString();
+                Console.WriteLine(response);
+                break;
+            }
+        case Command.PROCLIST:
+            {
+                var jsonStr = JsonSerializer.Serialize(command);
+                bw.Write(jsonStr);
+                await Task.Delay(50);
+                var response = br.ReadString();
+                Console.WriteLine(response);
+                break;
+            }
+        case Command.RUN:
+            {
+                var jsonStr = JsonSerializer.Serialize(command);
+                bw.Write(jsonStr);
+                await Task.Delay(50);
+
+                var responseBool = br.ReadBoolean();
+                if (responseBool is true)
+                    Console.WriteLine("Process succesfully ended");
+                else
+                    Console.WriteLine("Process couldn't ended");
+                break;
+            }
+        case Command.KILL:
+            {
+                var jsonStr = JsonSerializer.Serialize(command);
+                bw.Write(jsonStr);
+                await Task.Delay(50);
+
+                var responseBool = br.ReadBoolean();
+                if (responseBool is true)
+                    Console.WriteLine("Process succesfully ended");
+                else
+                    Console.WriteLine("Process couldn't ended");
+                break;
+            }
+        default:
+            break;
+    }
 
 }
